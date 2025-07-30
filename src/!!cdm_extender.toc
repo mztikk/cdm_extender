@@ -1,0 +1,10 @@
+## Title: cdm_extender
+## Interface: 110107
+## Notes: /cdme or /cdm_extender
+## Author: mztikk
+## Version: 1
+
+## SavedVariables: CDME_DATA
+
+embeds.xml
+cdm_extender.lua
