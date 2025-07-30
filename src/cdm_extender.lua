@@ -30,8 +30,6 @@ local function create_custom_cooldown_info(spell_id, self_aura, has_aura, has_ch
 end
 
 local function add_custom_id(cdm_type, spell_id, self_aura, has_aura, has_charges)
-    print(cdm_type, spell_id, self_aura, has_aura, has_charges)
-
     local custom_ids, refresh_func
     if cdm_type == "essential" then
         custom_ids = addon.db.profile.custom_essential_ids
@@ -57,7 +55,7 @@ local function add_custom_id(cdm_type, spell_id, self_aura, has_aura, has_charge
 
     if spell_id == nil then
         for _, v in pairs(custom_ids) do
-            print("Custom: ", cdm_type, "Spell ID:", v.spellID, "Self Aura:", v.selfAura, "Has Aura:", v.hasAura,
+            addon:Print("Custom: ", cdm_type, "Spell ID:", v.spellID, "Self Aura:", v.selfAura, "Has Aura:", v.hasAura,
                 "Has Charges:", v.charges)
         end
     end
@@ -65,7 +63,7 @@ local function add_custom_id(cdm_type, spell_id, self_aura, has_aura, has_charge
     for k, v in pairs(custom_ids) do
         if v.spellID == spell_id then
             custom_ids[k] = nil
-            print("Removed existing custom " .. cdm_type .. " ID for spell:", spell_id)
+            addon:Print("Removed existing custom " .. cdm_type .. " ID for spell:", spell_id)
             if refresh_func then
                 refresh_func()
             end
@@ -75,8 +73,8 @@ local function add_custom_id(cdm_type, spell_id, self_aura, has_aura, has_charge
 
     local custom_id = 9999900 + #custom_ids + 1
     custom_ids[custom_id] = create_custom_cooldown_info(spell_id, self_aura, has_aura, has_charges)
-    print("Added custom " .. cdm_type .. " ID for spell:", spell_id, "Self Aura:", self_aura, "Has Aura:", has_aura,
-        "Has Charges:", has_charges)
+    addon:Print("Added custom " .. cdm_type .. " ID for spell:", spell_id, "Self Aura:", self_aura, "Has Aura:",
+        has_aura, "Has Charges:", has_charges)
     if refresh_func then
         refresh_func()
     end
@@ -93,19 +91,19 @@ end
 function addon:OnChatCommand(input)
     local cdm_type, spell_id, self_aura, has_aura, has_charges = self:GetArgs(input, 5)
     if cdm_type == nil or spell_id == nil then
-        print("Usage: /cdme <essential|utility|buff|buff_bar> <spell_id> [self_aura] [has_aura] [has_charges]")
+        addon:Print("Usage: /cdme <essential|utility|buff|buff_bar> <spell_id> [self_aura] [has_aura] [has_charges]")
         return
     end
 
     cdm_type = string_lower(cdm_type)
     if cdm_type ~= "essential" and cdm_type ~= "utility" and cdm_type ~= "buff" and cdm_type ~= "buff_bar" then
-        print("Invalid CDM type:", cdm_type)
+        addon:Print("Invalid CDM type:", cdm_type)
         return
     end
 
     local spell_id_number = tonumber(spell_id)
     if spell_id_number == nil then
-        print("Invalid spell ID:", spell_id)
+        addon:Print("Invalid spell ID:", spell_id)
         return
     end
 
