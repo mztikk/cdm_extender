@@ -30,7 +30,6 @@ local function create_custom_cooldown_info(spell_id, self_aura, has_aura, has_ch
 end
 
 local function add_custom_id(cdm_type, spell_id, self_aura, has_aura, has_charges)
-    addon:Print(cdm_type, spell_id, self_aura, has_aura, has_charges)
     local custom_ids, refresh_func
     if cdm_type == "essential" then
         custom_ids = addon.db.profile.custom_essential_ids
@@ -94,7 +93,7 @@ function addon:OnChatCommand(input)
     local cdm_type, spell_id, self_aura, has_aura, has_charges = self:GetArgs(input, 5)
     if cdm_type == nil then
         addon:Print("Usage: /cdme <essential|utility|buff|buff_bar> <spell_id> [self_aura] [has_aura] [has_charges]",
-        "or /cdme <essential|utility|buff|buff_bar> to list custom cooldowns")
+            "or /cdme <essential|utility|buff|buff_bar> to list custom cooldowns")
         return
     end
 
