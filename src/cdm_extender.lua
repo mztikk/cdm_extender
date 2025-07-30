@@ -13,6 +13,16 @@ function addon:OnInitialize()
             custom_buff_bar_ids = {}
         }
     })
+
+    local og_get_cooldown_viewer_cooldown_info = C_CooldownViewer.GetCooldownViewerCooldownInfo
+    C_CooldownViewer.GetCooldownViewerCooldownInfo = function(cooldown_id)
+        local info = og_get_cooldown_viewer_cooldown_info(cooldown_id) or
+                         self.db.profile.custom_essential_ids[cooldown_id] or
+                         self.db.profile.custom_utility_ids[cooldown_id] or self.db.profile.custom_buff_ids[cooldown_id] or
+                         self.db.profile.custom_buff_bar_ids[cooldown_id]
+
+        return info
+    end
 end
 
 local function create_custom_cooldown_info(spell_id, self_aura, has_aura, has_charges)
@@ -163,19 +173,4 @@ BuffBarCooldownViewer.GetCooldownIDs = function(self)
     end
 
     return ids
-end
-
-local og_get_cooldown_viewer_cooldown_info = C_CooldownViewer.GetCooldownViewerCooldownInfo
-C_CooldownViewer.GetCooldownViewerCooldownInfo = function(cooldown_id)
-    local info = (addon.db.profile and addon.db.profile.custom_essential_ids and
-                     addon.db.profile.custom_essential_ids[cooldown_id]) or
-                     (addon.db.profile and addon.db.profile.custom_utility_ids and
-                         addon.db.profile.custom_utility_ids[cooldown_id]) or
-                     (addon.db.profile and addon.db.profile.custom_buff_ids and
-                         addon.db.profile.custom_buff_ids[cooldown_id]) or
-                     (addon.db.profile and addon.db.profile.custom_buff_bar_ids and
-                         addon.db.profile.custom_buff_bar_ids[cooldown_id]) or
-                     og_get_cooldown_viewer_cooldown_info(cooldown_id)
-
-    return info
 end
