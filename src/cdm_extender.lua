@@ -77,7 +77,7 @@ local function add_custom_id(cdm_type, spell_id, self_aura, has_aura, has_charge
 
     if not spell_id then
         for _, v in pairs(custom_ids) do
-            addon:Print("Custom: ", cdm_type, "Spell ID:", v.spellID, "Self Aura:", v.selfAura, "Has Aura:", v.hasAura,
+            addon:Print("Custom:", cdm_type, "Spell ID:", v.spellID, "Self Aura:", v.selfAura, "Has Aura:", v.hasAura,
                 "Has Charges:", v.charges)
         end
         return
