@@ -30,6 +30,7 @@ local function create_custom_cooldown_info(spell_id, self_aura, has_aura, has_ch
 end
 
 local function add_custom_id(cdm_type, spell_id, self_aura, has_aura, has_charges)
+    addon:Print(cdm_type, spell_id, self_aura, has_aura, has_charges)
     local custom_ids, refresh_func
     if cdm_type == "essential" then
         custom_ids = addon.db.profile.custom_essential_ids
@@ -53,11 +54,12 @@ local function add_custom_id(cdm_type, spell_id, self_aura, has_aura, has_charge
         end
     end
 
-    if spell_id == nil then
+    if not spell_id then
         for _, v in pairs(custom_ids) do
             addon:Print("Custom: ", cdm_type, "Spell ID:", v.spellID, "Self Aura:", v.selfAura, "Has Aura:", v.hasAura,
                 "Has Charges:", v.charges)
         end
+        return
     end
 
     for k, v in pairs(custom_ids) do
@@ -90,8 +92,8 @@ end
 
 function addon:OnChatCommand(input)
     local cdm_type, spell_id, self_aura, has_aura, has_charges = self:GetArgs(input, 5)
-    if cdm_type == nil or spell_id == nil then
-        addon:Print("Usage: /cdme <essential|utility|buff|buff_bar> <spell_id> [self_aura] [has_aura] [has_charges]")
+    if cdm_type == nil then
+        addon:Print("Usage: /cdme <essential|utility|buff|buff_bar> <spell_id> [self_aura] [has_aura] [has_charges]", "or /cdme <essential|utility|buff|buff_bar> to list custom cooldowns")
         return
     end
 
@@ -101,17 +103,11 @@ function addon:OnChatCommand(input)
         return
     end
 
-    local spell_id_number = tonumber(spell_id)
-    if spell_id_number == nil then
-        addon:Print("Invalid spell ID:", spell_id)
-        return
-    end
-
     self_aura = str_to_bool(self_aura)
     has_aura = str_to_bool(has_aura)
     has_charges = str_to_bool(has_charges)
 
-    add_custom_id(cdm_type, spell_id_number, self_aura, has_aura, has_charges)
+    add_custom_id(cdm_type, spell_id and tonumber(spell_id), self_aura, has_aura, has_charges)
 end
 
 addon:RegisterChatCommand("cdme", "OnChatCommand")
