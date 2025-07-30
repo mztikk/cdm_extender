@@ -39,25 +39,37 @@ local function create_custom_cooldown_info(spell_id, self_aura, has_aura, has_ch
     return info
 end
 
+local function table_size(t)
+    local count = 0
+    for _ in pairs(t) do
+        count = count + 1
+    end
+    return count
+end
+
 local function add_custom_id(cdm_type, spell_id, self_aura, has_aura, has_charges)
-    local custom_ids, refresh_func
+    local custom_ids, custom_id, refresh_func
     if cdm_type == "essential" then
         custom_ids = addon.db.profile.custom_essential_ids
+        custom_id = 99990000 + table_size(custom_ids) + 1
         refresh_func = function()
             EssentialCooldownViewer:RefreshLayout()
         end
     elseif cdm_type == "utility" then
         custom_ids = addon.db.profile.custom_utility_ids
+        custom_id = 99991000 + table_size(custom_ids) + 1
         refresh_func = function()
             UtilityCooldownViewer:RefreshLayout()
         end
     elseif cdm_type == "buff" then
         custom_ids = addon.db.profile.custom_buff_ids
+        custom_id = 99992000 + table_size(custom_ids) + 1
         refresh_func = function()
             BuffIconCooldownViewer:RefreshLayout()
         end
     elseif cdm_type == "buff_bar" then
         custom_ids = addon.db.profile.custom_buff_bar_ids
+        custom_id = 99993000 + table_size(custom_ids) + 1
         refresh_func = function()
             BuffBarCooldownViewer:RefreshLayout()
         end
@@ -82,7 +94,6 @@ local function add_custom_id(cdm_type, spell_id, self_aura, has_aura, has_charge
         end
     end
 
-    local custom_id = 9999900 + #custom_ids + 1
     custom_ids[custom_id] = create_custom_cooldown_info(spell_id, self_aura, has_aura, has_charges)
     addon:Print("Added custom " .. cdm_type .. " ID for spell:", spell_id, "Self Aura:", self_aura, "Has Aura:",
         has_aura, "Has Charges:", has_charges)
