@@ -20,9 +20,14 @@
         "SlashCmdList",
         "ID",
         "hash_SlashCmdList",
-        "DEFAULT_CHAT_FRAME"
+        "DEFAULT_CHAT_FRAME",
+        "BuffBarCooldownViewer",
+        "BuffIconCooldownViewer",
+        "UtilityCooldownViewer"
     ],
     "cSpell.words": [
-        "Cooldown"
+        "CDME",
+        "Cooldown",
+        "cooldowns"
     ]
 }
