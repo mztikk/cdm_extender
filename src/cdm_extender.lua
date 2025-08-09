@@ -130,19 +130,22 @@ local function add_custom_id(cdm_type, spell_id, self_aura, has_aura, has_charge
         end
 
         for _, v in ipairs(custom_ids) do
-            addon:Print("Custom:", cdm_type, "Spell ID:", v.spellID, "Self Aura:", v.selfAura, "Has Aura:", v.hasAura,
-                "Has Charges:", v.charges)
+            local spell_link = C_Spell.GetSpellLink(v.spellID)
+            addon:Print("Custom:", cdm_type, "Spell ID:", v.spellID, spell_link, "Self Aura:", v.selfAura, "Has Aura:",
+                v.hasAura, "Has Charges:", v.charges)
         end
         return
     end
 
     for i, v in ipairs(custom_ids) do
         if v.spellID == spell_id then
+            local spell_link = C_Spell.GetSpellLink(v.spellID)
+
             table_remove(custom_ids, i)
             local custom_fake_id = lookup[v]
             custom_fake_ids[custom_fake_id] = nil
             lookup[v] = nil
-            addon:Print("Removed existing custom " .. cdm_type .. " ID for spell:", spell_id)
+            addon:Print("Removed existing custom " .. cdm_type .. " ID for spell:", spell_id, spell_link)
             if refresh_func then
                 refresh_func()
             end
@@ -155,8 +158,10 @@ local function add_custom_id(cdm_type, spell_id, self_aura, has_aura, has_charge
     local custom_fake_id = get_custom_fake_id()
     custom_fake_ids[custom_fake_id] = cooldown_info
     lookup[cooldown_info] = custom_fake_id
-    addon:Print("Added custom " .. cdm_type .. " ID for spell:", spell_id, "Self Aura:", self_aura, "Has Aura:",
-        has_aura, "Has Charges:", has_charges)
+    local spell_link = C_Spell.GetSpellLink(spell_id)
+
+    addon:Print("Added custom " .. cdm_type .. " ID for spell:", spell_id, spell_link, "Self Aura:", self_aura,
+        "Has Aura:", has_aura, "Has Charges:", has_charges)
     if refresh_func then
         refresh_func()
     end
